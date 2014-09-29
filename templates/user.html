@@ -1,0 +1,13 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title></title>
+</head>
+<body>
+{% include 'navbar.html' %}
+{% for recipe in cur_user.recipe_set.all %}
+    <p><a href="/recipe/{{ recipe.id }}">{{ recipe.name }}</a>
+        {{ recipe.likes }} <a href="/likes/{{ recipe.id }}/">likes</a></p>
+{% endfor %}
+</body>
+</html>

@@ -1,0 +1,27 @@
+<!DOCTYPE html>
+<html>
+<head>
+    {% load staticfiles %}
+    <link rel="stylesheet" href="{% static "index.css" %}" type="text/css">
+    <title></title>
+</head>
+<body>
+{% include 'navbar.html' %}
+<a href="/add/">add new recipe</a>
+<div id="recipe_search">
+    <form method="post">
+        {% csrf_token %}
+        {{ form.as_p }}
+        <input type="submit" value="Search" />
+    </form>
+</div>
+<div id="best_recipes">
+    {% for recipe in recipes %}
+        {% if recipe.amounts_set.all %}
+            <p> <a href="/recipe/{{ recipe.id }}/">{{ recipe.name }}</a>
+                {{ recipe.likes }} <a href="/likes/{{ recipe.id }}/">likes</a></p>
+        {% endif %}
+    {% endfor %}
+</div>
+</body>
+</html>

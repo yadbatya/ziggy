@@ -1,0 +1,36 @@
+<!DOCTYPE html>
+<html>
+<head>
+    {% load staticfiles %}
+    <script src="{% static "jquery-1.11.1.min.js" %}"></script>
+    <title></title>
+</head>
+<body>
+{% include 'navbar.html' %}
+<script>
+    function like() {
+        $.ajax({
+            url: '/like/',
+            data: {
+                recipe_id: {{ recipe.id }},
+                user_id: {{ user.id }}
+            }
+        }).success(function(data) {
+            $("#like_button").html(data.like_str);
+            $('#likes_amount').html(data.likes);
+        });
+    }
+</script>
+<p>recipe for {{ recipe.name }}</p>
+<p>uploaded by <a href="/user/{{ recipe.user.id }}/">{{ recipe.user }}</a></p>
+<p>{{ recipe.upload_date|timesince }} long ago</p>
+<div id="likes">
+    <p> <span id="likes_amount"> {{ likes }} </span> <a href="/likes/{{ recipe.id }}/">likes</a></p>
+</div>
+{% for amount in recipe.amounts_set.all %}
+    <p>{{ amount }}</p>
+{% endfor %}
+<div id="instructions">{{ recipe.instructions }}</div>
+<button id="like_button" onclick="like()">{{ liked.to_button }}</button>
+</body>
+</html>

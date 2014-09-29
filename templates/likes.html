@@ -1,0 +1,12 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title></title>
+</head>
+<body>
+{% include 'navbar.html' %}
+{% for like in likes %}
+    <p> <a href="/user/{{ like.liker.id }}/">{{ like.liker }}</a> </p>
+{% endfor %}
+</body>
+</html>

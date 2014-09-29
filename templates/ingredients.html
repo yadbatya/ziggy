@@ -1,0 +1,120 @@
+<!DOCTYPE html>
+<html>
+<head>
+    {% load staticfiles %}
+    <link rel="stylesheet" href="{% static "jquery-ui-1.11.1\jquery-ui.css" %}">
+    <script src="{% static "jquery-1.11.1.min.js" %}"></script>
+    <script src="{% static "jquery-ui-1.11.1/jquery-ui.js" %}"></script>
+    <script>
+        var count;
+        var ingredients;
+
+        $(function() {
+            count = 1;
+            $.ajax({
+                url: '/ingredients/'
+            }).success(function(data) {
+                ingredients = data;
+                $(".names").autocomplete({
+                    source: function(request, response) {
+                        var matcher = new RegExp( "^" + $.ui.autocomplete.escapeRegex(request.term), "i");
+                        response($.grep(ingredients, function(item){
+                            return matcher.test(item);
+                        }));
+                    }
+                });
+            });
+        });
+
+        function remove_ing(id) {
+            console.log(id);
+            $("#ingredient_" + id + "_list").remove();
+        }
+
+        // get extra form count so we know what index to use for the next item.
+        function add() {
+            var a = $("#ingredient_" + count).val();
+            var b = $("#ingredient_" + count + "_amount").val();
+            var c = $("#ingredient_" + count + "_unit").val();
+            if (!a || !b || !c) {
+                return;
+            }
+            $(".ingredients").prop("readonly", true);
+            $(".units").change(function(){
+                lastSel.attr("selected", true);
+            });
+
+            $(".units").click(function(){
+                lastSel = $(".units option:selected");
+            });
+            $("#ingredient_" + count + "_list").append('<button type="button" onclick="remove_ing(' + count + ')">x</button>');
+            if (count > 30) {
+                alert("can't add so many ingredients");
+                return;
+            }
+            count++;
+            var elem = '<li id="ingredient_' + count + '_list" name="ingredient_' + count + '_list">\
+                <label for="ingredient_' + count + '">Name:</label>\
+                <input type="text" class="ingredients names ui-autocomplete-input" id="ingredient_' + count + '" name="ingredient_' + count + '"autocomplete="off"/>\
+                <label for="ingredient_' + count + '_amount">Amount:</label>\
+                <input type="number" class="ingredients" id="ingredient_' + count + '_amount" name="ingredient_' + count + '_amount"/>\
+                <label for="ingredient_' + count + '_unit">Unit:</label>\
+                <select class="ingredients units" id="ingredient_' + count + '_unit" name="ingredient_' + count + '_unit">\
+                    <option value="" selected="selected">---------</option>\
+                    <option value="1">cup</option>\
+                    <option value="2">table spoon</option>\
+                    <option value="3">tea spoon</option>\
+                    <option value="4">pinch</option>\
+                    <option value="5">gram</option>\
+                    <option value="6">milliliter</option>\
+                    <option value="7">unit</option>\
+                </select>\
+            </li>'
+            $("#ingred_list").append(elem);
+            $(".names").autocomplete({
+                source: function(request, response) {
+                    var matcher = new RegExp( "^" + $.ui.autocomplete.escapeRegex(request.term), "i");
+                    response($.grep(ingredients, function(item){
+                        return matcher.test(item);
+                    }));
+                }
+            });
+            $("[name=count]").val(count);
+        }
+    </script>
+    <title></title>
+</head>
+<body>
+{% include 'navbar.html' %}
+
+<form method="POST">
+    {% csrf_token %}
+    <div id="forms">
+        <input type="hidden" name="count" value="1">
+        ingredients for {{ recipe.name }}:
+        <ol id="ingred_list">
+            <li id="ingredient_1_list" name="ingredient_1_list">
+                <label for="ingredient_1">Name:</label>
+                <input type="text" class="ingredients names" id="ingredient_1" name="ingredient_1"/>
+                <label for="ingredient_1_amount">Amount:</label>
+                <input type="number" class="ingredients" id="ingredient_1_amount" name="ingredient_1_amount"/>
+                <label for="ingredient_1_unit">Unit:</label>
+                <select class="ingredients units" id="ingredient_1_unit" name="ingredient_1_unit">
+                    <option value="" selected="selected">---------</option>
+                    <option value="1">cup</option>
+                    <option value="2">table spoon</option>
+                    <option value="3">tea spoon</option>
+                    <option value="4">pinch</option>
+                    <option value="5">gram</option>
+                    <option value="6">milliliter</option>
+                    <option value="7">unit</option>
+                </select>
+            </li>
+        </ol>
+        <button type="button" id="add-another" onclick="add()">add another</button><br>
+        <textarea placeholder="enter the instructions here" name="instructions" rows="11" cols="48"></textarea>
+    </div>
+    <input type="submit" />
+</form>
+</body>
+</html>
