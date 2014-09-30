@@ -1,9 +1,22 @@
 
-#best_recipes {
-    font: "Segoe UI", "Helvetica Neue", Helvetica, Arial, sans-serif;
-    color: red;
+/*#best_recipes {*/
+    /*font: "Segoe UI", "Helvetica Neue", Helvetica, Arial, sans-serif;*/
+    /*color: red;*/
+/*}*/
+#recipe_1 {
+    background-color: #99FFCC;
+    border-style: inset;
+    border-color: #7ACCA3;
+    border-radius: 10px;
+    border-width: 2px;
 }
 
 p {
     font-size: 40
+}
+
+#id_name {
+    background-color: rosybrown;
+    position: absolute;
+    margin-left: 50px;
 }

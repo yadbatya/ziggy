@@ -19,6 +19,12 @@ DIFFICULTY_LEVEL = ((1, "easy"),
                     (4, "almost expert"),
                     (5, "expert"))
 
+CATEGORIES = ((1, "easy"),
+              (2, "almost easy"),
+              (3, "medium"),
+              (4, "almost expert"),
+              (5, "expert"))
+
 
 class Recipe(models.Model):
     id = models.AutoField(primary_key=True)
@@ -29,6 +35,8 @@ class Recipe(models.Model):
     ingredients = models.ManyToManyField(Ingredients, through='Amounts')
     upload_date = models.DateTimeField(default=timezone.now())
     instructions = models.TextField(blank=True)
+    # category = models.CommaSeparatedIntegerField(choices=CATEGORIES)
+    # picture = models.ImageField('static')
     #TODO maybe need also likes field that sums all the likes and gets updated when a like is given
     #TODO or maybe a many to many field of all user the like it
 

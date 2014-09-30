@@ -58,7 +58,7 @@ class RecipeSearchForm(forms.Form):
     name = forms.CharField(max_length=100, required=False)
     prep_time_min = forms.IntegerField(required=False)
     prep_time_max = forms.IntegerField(required=False)
-    ingredients = forms.ModelMultipleChoiceField(Ingredients.objects.all(), widget=forms.CheckboxSelectMultiple,
+    ingredients = forms.ModelMultipleChoiceField(Ingredients.objects.all().order_by('name'), widget=forms.CheckboxSelectMultiple,
                                                  required=False)
     difficulty_levels = forms.MultipleChoiceField(choices=DIFFICULTY_LEVEL, widget=forms.CheckboxSelectMultiple,
                                                   required=False)

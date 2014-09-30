@@ -8,26 +8,23 @@
     <script>
         var count;
         var ingredients;
-
-        $(function() {
-            count = 1;
-            $.ajax({
-                url: '/ingredients/'
-            }).success(function(data) {
-                ingredients = data;
-                $(".names").autocomplete({
-                    source: function(request, response) {
-                        var matcher = new RegExp( "^" + $.ui.autocomplete.escapeRegex(request.term), "i");
-                        response($.grep(ingredients, function(item){
-                            return matcher.test(item);
-                        }));
-                    }
-                });
+        $(document).on('keydown.autocomplete', ".names", function(){
+            $(this).autocomplete({source: function(request, response) {
+                var matcher = new RegExp( "^" + $.ui.autocomplete.escapeRegex(request.term), "i");
+                response($.grep(ingredients, function(item){
+                    return matcher.test(item);
+                }));
+            }
             });
+        });
+        count = 1;
+        $.ajax({
+            url: '/ingredients/'
+        }).success(function(data) {
+            ingredients = data;
         });
 
         function remove_ing(id) {
-            console.log(id);
             $("#ingredient_" + id + "_list").remove();
         }
 
@@ -37,6 +34,7 @@
             var b = $("#ingredient_" + count + "_amount").val();
             var c = $("#ingredient_" + count + "_unit").val();
             if (!a || !b || !c) {
+                alert("illegal values");
                 return;
             }
             $(".ingredients").prop("readonly", true);
@@ -71,14 +69,6 @@
                 </select>\
             </li>'
             $("#ingred_list").append(elem);
-            $(".names").autocomplete({
-                source: function(request, response) {
-                    var matcher = new RegExp( "^" + $.ui.autocomplete.escapeRegex(request.term), "i");
-                    response($.grep(ingredients, function(item){
-                        return matcher.test(item);
-                    }));
-                }
-            });
             $("[name=count]").val(count);
         }
     </script>

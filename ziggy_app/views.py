@@ -15,10 +15,10 @@ from ziggy_app.forms import RecipeSearchForm, RegisterForm, LoginForm, NewRecipe
 from ziggy_app.models import Recipe, Ingredients, Likes, Amounts
 
 
-@login_required
+# @login_required
 def home(request):
-    # if not request.user.is_authenticated():
-    #     return redirect('/login/')
+    if not request.user.is_authenticated():
+        return redirect('/login/')
     if request.method == "POST":
         form = RecipeSearchForm(request.POST)
         if form.is_valid():
